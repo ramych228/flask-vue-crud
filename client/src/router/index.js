@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Ping from '@/components/Ping';
 import Books from '@/components/Books';
 import StudentsPage from "@/components/students_page/StudentsPage";
+import ProjectsPage from "../components/projects_page/ProjectsPage";
 
 Vue.use(Router);
 
@@ -19,9 +20,14 @@ export default new Router({
       component: Ping,
     },
     {
-      path: '/',
+      path: '/students',
       name: 'Students',
       component: StudentsPage,
+    },
+    {
+      path: '/projects',
+      name: 'Projects',
+      component: ProjectsPage,
     }
   ],
   mode: 'history',

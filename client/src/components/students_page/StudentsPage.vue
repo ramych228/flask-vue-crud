@@ -10,7 +10,7 @@
       Передовой Инженерной Школы ИТМО
     </p>
     <PrimeButton text="Подать заявку"/>
-    <StudentsTable :students="getStudents()"/>
+    <StudentsTable :students="fetchStudents()"/>
     <div class="partner-container">
       <div class="partner-text">
         <h2>Станьте партнером ЦИФРОВОЙ ПЛАТФОРМЫ</h2>
@@ -26,21 +26,20 @@
 import PrimeButton from "../default_components/PrimeButton";
 import StudentsTable from "./StudentsTable";
 import StudentCard from "./StudentCard";
+import axios from "axios";
 
 export default {
   name: "StudentsPage",
   components: {StudentCard, StudentsTable, PrimeButton},
   methods: {
-    getStudents() {
-      //   fetch("http://localhost:3000/students")
-      //     .then(response => response.json())
-      //     .then(data => {
-      //       this.students = data;
-      //     })
-      //     .catch(error => {
-      //       console.log(error);
-      //     });
-      // }
+    fetchStudents() {
+      // axios.get("http://localhost:8080/api/students")
+      //   .then(response => {
+      //     this.students = response.data;
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
       return [
         {
           id: 1,
@@ -89,7 +88,15 @@ export default {
         },
       ]
     },
-  }
+  },
+  data() {
+    return {
+      students: [],
+    };
+  },
+  mounted() {
+    this.fetchStudents();
+  },
 }
 </script>
 
