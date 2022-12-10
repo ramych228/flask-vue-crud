@@ -36,7 +36,7 @@ export default {
     fetchProjects() {
       axios.get("http://localhost:5000/api/projects")
         .then(response => {
-          this.projects = response.data;
+          this.projects = response.data.projects;
         })
         .catch(error => {
           console.log(error);

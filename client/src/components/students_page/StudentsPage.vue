@@ -35,7 +35,7 @@ export default {
     fetchStudents() {
       axios.get("http://localhost:5000/api/students")
         .then(response => {
-          this.students = response.data;
+          this.students = response.data.students;
         })
         .catch(error => {
           console.log(error);
