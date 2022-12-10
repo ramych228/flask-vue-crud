@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div v-if="type === 'primary'" class="ring"></div>
+    <div class="ring"></div>
     <button class="color" :col="color">{{ text }}</button>
   </div>
 </template>
@@ -27,6 +27,12 @@ export default {
   mounted() {
     this.$el.children[0].style.borderColor = this.color;
     this.$el.children[1].style.backgroundColor = this.color;
+    if (this.type === "primary") {
+      this.$el.children[0].classList.add("pulse-ring");
+      this.$el.children[1].classList.add("pulse-button");
+    } else {
+      this.$el.children[0].style.display = "none";
+    }
   }
 }
 
@@ -41,6 +47,7 @@ export default {
   align-items: center;
   height: 60px;
   width: 400px;
+  font-size: 40px;
 }
 
 button {
@@ -49,13 +56,11 @@ button {
   position: absolute;
   background-color: #42b983;
   color: #ffffffff;
-  font-size: 40px;
+  font-size: 1em;
   font-family: "Comic Sans MS", cursive, sans-serif;
   border: none;
   cursor: pointer;
   border-radius: 32px;
-
-  animation: pulse 4s infinite ease-in-out;
 }
 
 .ring {
@@ -68,7 +73,14 @@ button {
   border-color: #2c3e50;
   border-width: 2px;
   border-style: solid;
+}
+
+.pulse-ring {
   animation: pulse 4s -2s infinite ease-in-out;
+}
+
+.pulse-button {
+  animation: pulse 4s infinite ease-in-out;
 }
 
 @keyframes pulse {
@@ -76,7 +88,7 @@ button {
     transform: scale(1);
   }
   50% {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   100% {
     transform: scale(1);
