@@ -52,14 +52,16 @@ def register():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data['username']
+    username = data['login']
     password = data['password']
     student = StudentsHandler.get_student_by_username(session, username)
     if student is None:
         return jsonify('User does not exist'), 400
     if student.password != password:
         return jsonify('Wrong password'), 400
-    return jsonify({'token': student.token}), 200
+    dict = student.serialize()
+    dict['role'] = 'student'
+    return jsonify({'user': dict}), 200
 
 
 @app.route('/api/students', methods=['GET'])
