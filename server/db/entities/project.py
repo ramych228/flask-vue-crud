@@ -7,23 +7,27 @@ class Project(Abstract):
     __tablename__ = 'projects'
     name = Column(String(100))
     brief = Column(String(500))
+    description = Column(String(1000))
 
-    def __init__(self, name, brief, *args, **kwargs):
+    def __init__(self, name, brief, description, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.brief = brief
+        self.description = description
 
     def serialize(self):
         dict = super().serialize()
         dict.update({
             'name': self.name,
-            'brief': self.brief
+            'brief': self.brief,
+            'description': self.description
         })
         return dict
 
-    def update(self, name, brief):
+    def update(self, name, brief, description):
         self.name = name
         self.brief = brief
+        self.description = description
         super().update()
 
     def __repr__(self):

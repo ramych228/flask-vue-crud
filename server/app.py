@@ -6,6 +6,8 @@ from db.handlers.projects_handle import ProjectsHandler
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 
+from server.db.handlers.investors_handle import InvestorsHandler
+
 # configuration
 DEBUG = True
 
@@ -39,6 +41,8 @@ def register():
     print(username, password)
     if StudentsHandler.get_student_by_username(session, username) is not None:
         return jsonify('Username already exists'), 400
+    if InvestorsHandler.get_investor_by_username(session, username) is not None:
+        return jsonify('Username already exists'), 400
     token = RSA.generate(2048)
     print(token.export_key())
     if role == 'student':
@@ -46,7 +50,11 @@ def register():
         dict = student.serialize()
         dict['role'] = 'student'
         return jsonify({'user': dict}), 200
-    return jsonify(), 200
+    else:
+        investor = InvestorsHandler.add_investor(session, name, 'An investor', username, password, token.export_key())
+        dict = investor.serialize()
+        dict['role'] = 'investor'
+        return jsonify({'user': dict}), 200
 
 
 @app.route('/api/login', methods=['POST'])
@@ -55,13 +63,22 @@ def login():
     username = data['login']
     password = data['password']
     student = StudentsHandler.get_student_by_username(session, username)
-    if student is None:
+    investor = InvestorsHandler.get_investor_by_username(session, username)
+    if student is None and investor is None:
         return jsonify('User does not exist'), 400
-    if student.password != password:
+    if student is not None and student.password != password:
         return jsonify('Wrong password'), 400
-    dict = student.serialize()
-    dict['role'] = 'student'
-    return jsonify({'user': dict}), 200
+    if investor is not None and investor.password != password:
+        return jsonify('Wrong password'), 400
+    if student is not None:
+        dict = student.serialize()
+        dict['role'] = 'student'
+        return jsonify({'user': dict}), 200
+    if investor is not None:
+        dict = investor.serialize()
+        dict['role'] = 'investor'
+        return jsonify({'user': dict}), 200
+    return jsonify('Unknown entity'), 400
 
 
 @app.route('/api/students', methods=['GET'])
