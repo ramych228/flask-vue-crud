@@ -65,7 +65,11 @@ export default {
         role: this.role,
         password: this.password
       }).then(response => {
-        localStorage.setItem("loginToken", response.data.token);
+        localStorage.setItem("token", response.data.user.token);
+        localStorage.setItem("role", response.data.user.role);
+        localStorage.setItem("fio", response.data.user.fio);
+        localStorage.setItem("login", response.data.user.login);
+        this.$router.push("/");
       }).catch(error => {
         document.getElementById("error_text").innerText = "Ошибка регистрации";
       })
