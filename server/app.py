@@ -3,6 +3,8 @@ from flask_cors import CORS
 from db.dbsetup import DBSetup
 from db.handlers.students_handle import StudentsHandler
 from db.handlers.projects_handle import ProjectsHandler
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 
 # configuration
 DEBUG = True
@@ -18,19 +20,46 @@ db = DBSetup('db.db')
 db.reset_db()
 session = db.get_session()
 
-StudentsHandler.add_student(session, 'John', 'A student')
-StudentsHandler.add_student(session, 'Jane', 'A student')
-StudentsHandler.add_student(session, 'Johnsdsd', 'A student')
-
-ProjectsHandler.add_project(session, 'Project 1', 'A project')
-ProjectsHandler.add_project(session, 'Project 2', 'A project')
-ProjectsHandler.add_project(session, 'Project 3', 'A project')
-
 
 # sanity check route
 @app.route('/api/ping', methods=['GET'])
 def ping_pong():
     return jsonify('pong!')
+
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    print('register')
+    print(request.get_json())
+    data = request.get_json()
+    username = data['login']
+    password = data['password']
+    name = data['fio']
+    role = data['role']
+    print(username, password)
+    if StudentsHandler.get_student_by_username(session, username) is not None:
+        return jsonify('Username already exists'), 400
+    token = RSA.generate(2048)
+    print(token.export_key())
+    if role == 'student':
+        student = StudentsHandler.add_student(session, name, 'A student', username, password, token.export_key())
+        dict = student.serialize()
+        dict['role'] = 'student'
+        return jsonify({'user': dict}), 200
+    return jsonify(), 200
+
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    student = StudentsHandler.get_student_by_username(session, username)
+    if student is None:
+        return jsonify('User does not exist'), 400
+    if student.password != password:
+        return jsonify('Wrong password'), 400
+    return jsonify({'token': student.token}), 200
 
 
 @app.route('/api/students', methods=['GET'])
@@ -45,7 +74,7 @@ def get_all_students():
 @app.route('/api/students/<student_id>', methods=['GET'])
 def get_student(student_id):
     response_object = {'status': 'success'}
-    student = StudentsHandler.get_student(session, student_id)
+    student = StudentsHandler.get_student_by_id(session, student_id)
     response_object['message'] = 'Student retrieved successfully'
     response_object['student'] = student.serialize()
     return jsonify(response_object)
@@ -151,10 +180,6 @@ def delete_all_projects():
     else:
         response_object['message'] = 'All projects not removed'
     return jsonify(response_object)
-
-
-
-
 
 
 if __name__ == '__main__':

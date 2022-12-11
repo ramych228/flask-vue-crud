@@ -7,20 +7,24 @@ class StudentsHandler:
         return session.query(Student).all()
 
     @staticmethod
-    def get_student(session, student_id):
+    def get_student_by_id(session, student_id):
         return session.query(Student).filter_by(id=student_id).first()
 
     @staticmethod
-    def add_student(session, name, description):
-        student = Student(name, description)
+    def get_student_by_username(session, username):
+        return session.query(Student).filter_by(username=username).first()
+
+    @staticmethod
+    def add_student(session, name, description, username, password, token):
+        student = Student(name, description, username, password, token)
         session.add(student)
         session.commit()
         return student
 
     @staticmethod
-    def update_student(session, student_id, name, description):
-        student = StudentsHandler.get_student(session, student_id)
-        student.update(name, description)
+    def update_student(session, student_id, name, description, username, password, token):
+        student = StudentsHandler.get_student_by_id(session, student_id)
+        student.Update(name, description, username, password, token)
         session.commit()
         return student
 
