@@ -17,9 +17,9 @@ class DBSetup:
         Base.metadata.create_all(engine)
         Session = sessionmaker(bind=engine)
         session = Session()
-        session.add(Project('Project 1', 'Project 1 description'))
-        session.add(Project('Project 2', 'Project 2 description'))
-        session.add(Project('Project 3', 'Project 3 description'))
+        session.add(Project('Project 1', 'Project 1 description', ''))
+        session.add(Project('Project 2', 'Project 2 description', ''))
+        session.add(Project('Project 3', 'Project 3 description', ''))
         session.commit()
         session.close()
 

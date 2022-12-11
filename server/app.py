@@ -3,10 +3,10 @@ from flask_cors import CORS
 from db.dbsetup import DBSetup
 from db.handlers.students_handle import StudentsHandler
 from db.handlers.projects_handle import ProjectsHandler
+from db.handlers.investors_handle import InvestorsHandler
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 
-from server.db.handlers.investors_handle import InvestorsHandler
 
 # configuration
 DEBUG = True
