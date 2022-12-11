@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "RegisterBlock",
 
@@ -59,7 +61,7 @@ export default {
         return;
       }
 
-      this.$http.post("http://localhost:5000/api/register", {
+      axios.post("http://localhost:5000/api/register", {
         login: this.login,
         fio: this.fio,
         role: this.role,
