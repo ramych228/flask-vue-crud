@@ -4,11 +4,17 @@ import Ping from '@/components/Ping';
 import Books from '@/components/Books';
 import StudentsPage from "@/components/students_page/StudentsPage";
 import ProjectsPage from "../components/projects_page/ProjectsPage";
+import AccountPageStudent from "../components/account/AccountPageStudent";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      path: '/account',
+      name: 'AccountPageStudent',
+      component: AccountPageStudent,
+    },
     {
       path: '/books',
       name: 'Books',
