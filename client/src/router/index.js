@@ -4,6 +4,7 @@ import Ping from '@/components/Ping';
 import Books from '@/components/Books';
 import StudentsPage from "@/components/students_page/StudentsPage";
 import ProjectsPage from "../components/projects_page/ProjectsPage";
+import AccountPageStudent from "../components/account/AccountPageStudent";
 import ExchangePage from "../components/exchange_page/ExchangePage";
 import AuthPage from "../components/auth_page/LoginPage";
 import LoginPage from "../components/auth_page/LoginPage";
